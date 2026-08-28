@@ -359,10 +359,27 @@
     return 'just now';
   }
 
-  function repoLink(repo){
-    return repo.has_pages
-      ? `https://${USERNAME}.github.io/${repo.name}/`
-      : repo.html_url;
+  // Checks whether a project's Pages site actually responds, instead of
+  // trusting the GitHub API's `has_pages` flag (which can lag several
+  // minutes behind a freshly-enabled Pages site returning its first build).
+  // Same-origin (both live under itstallam.github.io), so no CORS issue.
+  function checkLive(url, timeoutMs = 4000){
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), timeoutMs);
+    return fetch(url, { method: 'HEAD', cache: 'no-store', signal: controller.signal })
+      .then(res => res.ok)
+      .catch(() => false)
+      .finally(() => clearTimeout(timer));
+  }
+
+  async function resolveLinks(repos){
+    await Promise.all(repos.map(async repo => {
+      const pagesUrl = `https://${USERNAME}.github.io/${repo.name}/`;
+      const live = repo.has_pages ? await checkLive(pagesUrl) : false;
+      repo._liveUrl = live ? pagesUrl : repo.html_url;
+      repo._isLive = live;
+    }));
+    return repos;
   }
 
   let allRepos = [];
@@ -382,14 +399,14 @@
     list.forEach((repo, i) => {
       const a = document.createElement('a');
       a.className = 'card';
-      a.href = repoLink(repo);
+      a.href = repo._liveUrl || repo.html_url;
       a.target = '_blank';
       a.rel = 'noopener';
       a.style.animationDelay = `${Math.min(i*40, 400)}ms`;
 
       const desc = repo.description ? escapeHtml(repo.description) : 'No description provided.';
       const lang = repo.language || '—';
-      const isLive = repo.has_pages;
+      const isLive = repo._isLive;
 
       a.innerHTML = `
         <div class="card-top">
@@ -437,6 +454,8 @@
         (!TOPIC_FILTER || (r.topics || []).includes(TOPIC_FILTER))
       );
 
+      await resolveLinks(allRepos);
+
       render(allRepos);
       genline.textContent = `generated ${new Date().toLocaleString()} · ${allRepos.length} repos indexed`;
     } catch(err){
@@ -449,6 +468,7 @@
   typeLines([
     { prefix: '<span class="prompt">$</span> ', text: `curl api.github.com/users/${USERNAME}/repos`, cls: '' },
     { prefix: '', text: 'scanning public repositories...', cls: '' },
+    { prefix: '', text: 'probing pages endpoints...', cls: '' },
     { prefix: '', text: 'done.', cls: 'ok' }
   ], load);
 
