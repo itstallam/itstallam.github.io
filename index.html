@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>itstallam :: write-ups</title>
-<meta name="description" content="Penetration testing and CTF write-up index for itstallam.">
+<title>itstallam :: Tony Tallam — cybersecurity + write-ups</title>
+<meta name="description" content="Tony Tallam — cybersecurity practitioner. Bio, skills, and a live index of penetration testing write-ups pulled from GitHub.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
@@ -27,7 +27,6 @@
   }
 
   *{ box-sizing:border-box; }
-
   html{ scroll-behavior:smooth; }
 
   body{
@@ -38,220 +37,176 @@
       var(--bg);
     color:var(--text);
     font-family:var(--sans);
-    line-height:1.5;
+    line-height:1.55;
     min-height:100vh;
   }
 
   a{ color:inherit; }
-
   ::selection{ background:var(--amber); color:#000; }
+  :focus-visible{ outline:2px solid var(--amber); outline-offset:2px; }
 
-  :focus-visible{
-    outline:2px solid var(--amber);
-    outline-offset:2px;
-  }
-
-  .wrap{
-    max-width:960px;
-    margin:0 auto;
-    padding:64px 24px 96px;
-  }
+  .wrap{ max-width:960px; margin:0 auto; padding:64px 24px 96px; }
 
   /* ---------- header / terminal hero ---------- */
 
   .prompt-bar{
-    display:flex;
-    align-items:center;
-    gap:8px;
-    font-family:var(--mono);
-    font-size:13px;
-    color:var(--text-dim);
-    margin-bottom:18px;
-    letter-spacing:0.02em;
+    display:flex; align-items:center; gap:8px;
+    font-family:var(--mono); font-size:13px; color:var(--text-dim);
+    margin-bottom:18px; letter-spacing:0.02em;
   }
-  .prompt-bar .dot{
-    width:8px; height:8px; border-radius:50%;
-    background:var(--hairline);
-  }
+  .prompt-bar .dot{ width:8px; height:8px; border-radius:50%; background:var(--hairline); }
 
   .terminal{
     font-family:var(--mono);
     font-size:clamp(13px, 2.4vw, 16px);
     color:var(--text-muted);
     white-space:pre-wrap;
-    min-height:7.5em;
+    min-height:6em;
   }
   .terminal .prompt{ color:var(--amber); }
-  .terminal .path{ color:var(--text); }
   .terminal .ok{ color:#7fdc7f; }
   .terminal .cursor{
-    display:inline-block;
-    width:8px; height:1.1em;
-    background:var(--amber);
-    vertical-align:text-bottom;
-    margin-left:2px;
-    animation:blink 1s steps(1) infinite;
+    display:inline-block; width:8px; height:1.1em; background:var(--amber);
+    vertical-align:text-bottom; margin-left:2px; animation:blink 1s steps(1) infinite;
   }
   @keyframes blink{ 50%{ opacity:0; } }
 
-  h1{
-    font-family:var(--mono);
-    font-weight:700;
-    font-size:clamp(28px, 5vw, 44px);
-    letter-spacing:-0.01em;
-    margin:28px 0 6px;
-    color:var(--text);
+  .hero-top{
+    display:flex; gap:28px; align-items:center; flex-wrap:wrap;
+    margin:28px 0 8px;
   }
-  h1 .veni{ color:var(--amber); }
+  .hero-gif{
+    width:150px; height:150px; object-fit:cover;
+    border:1px solid var(--hairline); border-radius:var(--radius);
+    filter:saturate(0.85) contrast(1.05);
+  }
+  .hero-text{ flex:1; min-width:240px; }
 
-  .subtitle{
-    color:var(--text-muted);
-    font-size:15px;
-    max-width:58ch;
-    margin:0 0 40px;
+  h1{
+    font-family:var(--mono); font-weight:700;
+    font-size:clamp(24px, 4.4vw, 36px);
+    letter-spacing:-0.01em; margin:0 0 8px; color:var(--text);
   }
+  h1 .accent{ color:var(--amber); }
+  h1 .skull{ color:var(--danger); }
+
+  .typing-wrap{ min-height:28px; margin-bottom:4px; }
+  .typing-wrap img{ max-width:100%; height:auto; display:block; }
+
+  .badge-row{ display:flex; flex-wrap:wrap; gap:6px; margin-top:12px; }
+  .badge-row img{ height:20px; }
+
+  .subtitle{ color:var(--text-muted); font-size:15px; max-width:62ch; margin:36px 0 0; }
+
+  /* ---------- section scaffolding ---------- */
+
+  section{ margin-top:64px; }
+
+  .eyebrow{
+    font-family:var(--mono); font-size:12px; color:var(--amber);
+    text-transform:uppercase; letter-spacing:0.08em;
+    display:flex; align-items:center; gap:10px;
+    margin-bottom:16px;
+  }
+  .eyebrow::after{ content:''; flex:1; height:1px; background:var(--hairline); }
+
+  .panel{
+    background:var(--bg-panel); border:1px solid var(--hairline);
+    border-radius:var(--radius); padding:22px 24px;
+  }
+  .panel + .panel{ margin-top:12px; }
+  .panel p{ margin:0; color:var(--text-muted); font-size:14.5px; }
+  .panel p + p{ margin-top:12px; }
+
+  .list-plain{ margin:0; padding-left:0; list-style:none; }
+  .list-plain li{
+    padding:6px 0 6px 20px; position:relative; color:var(--text-muted); font-size:14.5px;
+  }
+  .list-plain li::before{ content:'›'; position:absolute; left:0; color:var(--amber); }
+
+  .skill-group{ margin-bottom:18px; }
+  .skill-group:last-child{ margin-bottom:0; }
+  .skill-group h4{
+    font-family:var(--mono); font-size:12.5px; color:var(--text);
+    margin:0 0 8px; text-transform:uppercase; letter-spacing:0.04em;
+  }
+  .tag-row{ display:flex; flex-wrap:wrap; gap:6px; }
+  .tag{
+    font-family:var(--mono); font-size:12px; color:var(--text-muted);
+    border:1px solid var(--hairline); border-radius:2px; padding:3px 8px;
+  }
+
+  .fact{
+    font-family:var(--mono); font-size:13.5px; color:var(--text-muted);
+    border-left:2px solid var(--amber-dim); padding:8px 0 8px 14px; margin:0 0 10px;
+  }
+  .fact:last-child{ margin-bottom:0; }
+  .fact code{ color:var(--amber); background:none; }
+
+  .stats-row{
+    display:flex; flex-wrap:wrap; gap:14px; justify-content:center; margin-top:4px;
+  }
+  .stats-row img{ max-width:100%; border-radius:var(--radius); }
 
   /* ---------- controls ---------- */
 
   .controls{
-    display:flex;
-    align-items:center;
-    gap:10px;
-    border:1px solid var(--hairline);
-    background:var(--bg-panel);
-    border-radius:var(--radius);
-    padding:10px 14px;
-    margin-bottom:36px;
+    display:flex; align-items:center; gap:10px;
+    border:1px solid var(--hairline); background:var(--bg-panel);
+    border-radius:var(--radius); padding:10px 14px; margin-bottom:20px;
   }
-  .controls label{
-    font-family:var(--mono);
-    color:var(--amber);
-    font-size:13px;
-    white-space:nowrap;
-  }
+  .controls label{ font-family:var(--mono); color:var(--amber); font-size:13px; white-space:nowrap; }
   .controls input{
-    flex:1;
-    background:transparent;
-    border:none;
-    color:var(--text);
-    font-family:var(--mono);
-    font-size:14px;
-    outline:none;
+    flex:1; background:transparent; border:none; color:var(--text);
+    font-family:var(--mono); font-size:14px; outline:none;
   }
   .controls input::placeholder{ color:var(--text-dim); }
-  .controls .count{
-    font-family:var(--mono);
-    font-size:12px;
-    color:var(--text-dim);
-    white-space:nowrap;
-  }
+  .controls .count{ font-family:var(--mono); font-size:12px; color:var(--text-dim); white-space:nowrap; }
 
   /* ---------- grid / cards ---------- */
 
-  .grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fill, minmax(270px, 1fr));
-    gap:14px;
-  }
+  .grid{ display:grid; grid-template-columns:repeat(auto-fill, minmax(270px, 1fr)); gap:14px; }
 
   .card{
-    display:flex;
-    flex-direction:column;
-    justify-content:space-between;
-    gap:16px;
-    background:var(--bg-panel);
-    border:1px solid var(--hairline);
-    border-left:2px solid var(--hairline);
-    border-radius:var(--radius);
-    padding:18px 18px 16px;
-    text-decoration:none;
-    color:inherit;
-    opacity:0;
-    transform:translateY(6px);
-    animation:reveal 0.4s ease forwards;
+    display:flex; flex-direction:column; justify-content:space-between; gap:16px;
+    background:var(--bg-panel); border:1px solid var(--hairline); border-left:2px solid var(--hairline);
+    border-radius:var(--radius); padding:18px 18px 16px; text-decoration:none; color:inherit;
+    opacity:0; transform:translateY(6px); animation:reveal 0.4s ease forwards;
     transition:border-color 0.15s ease, background 0.15s ease, transform 0.15s ease;
   }
-  .card:hover, .card:focus-visible{
-    border-left-color:var(--amber);
-    background:var(--bg-panel-hov);
-    transform:translateY(-2px);
-  }
+  .card:hover, .card:focus-visible{ border-left-color:var(--amber); background:var(--bg-panel-hov); transform:translateY(-2px); }
   @keyframes reveal{ to{ opacity:1; transform:translateY(0); } }
 
   .card-top{ display:flex; flex-direction:column; gap:8px; }
-
-  .card-name{
-    font-family:var(--mono);
-    font-weight:600;
-    font-size:15px;
-    color:var(--text);
-    word-break:break-word;
-  }
+  .card-name{ font-family:var(--mono); font-weight:600; font-size:15px; color:var(--text); word-break:break-word; }
   .card-name .accent{ color:var(--amber); }
-
   .card-desc{
-    font-size:13.5px;
-    color:var(--text-muted);
-    display:-webkit-box;
-    -webkit-line-clamp:3;
-    -webkit-box-orient:vertical;
-    overflow:hidden;
+    font-size:13.5px; color:var(--text-muted);
+    display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden;
   }
-
   .card-meta{
-    display:flex;
-    flex-wrap:wrap;
-    gap:8px 14px;
-    font-family:var(--mono);
-    font-size:11px;
-    color:var(--text-dim);
-    text-transform:uppercase;
-    letter-spacing:0.04em;
+    display:flex; flex-wrap:wrap; gap:8px 14px; font-family:var(--mono); font-size:11px;
+    color:var(--text-dim); text-transform:uppercase; letter-spacing:0.04em;
   }
   .card-meta span{ display:inline-flex; align-items:center; gap:5px; }
   .lang-dot{ width:7px; height:7px; border-radius:50%; background:var(--amber-dim); }
-
   .card-cta{
-    font-family:var(--mono);
-    font-size:12px;
-    color:var(--amber);
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    border-top:1px solid var(--hairline);
-    padding-top:12px;
+    font-family:var(--mono); font-size:12px; color:var(--amber);
+    display:flex; align-items:center; justify-content:space-between;
+    border-top:1px solid var(--hairline); padding-top:12px;
   }
   .card-cta .badge{
-    font-size:10px;
-    color:var(--text-dim);
-    border:1px solid var(--hairline);
-    border-radius:2px;
-    padding:2px 6px;
-    text-transform:uppercase;
-    letter-spacing:0.05em;
+    font-size:10px; color:var(--text-dim); border:1px solid var(--hairline);
+    border-radius:2px; padding:2px 6px; text-transform:uppercase; letter-spacing:0.05em;
   }
 
-  .empty, .error{
-    font-family:var(--mono);
-    color:var(--text-dim);
-    font-size:14px;
-    padding:40px 0;
-    text-align:center;
-  }
+  .empty, .error{ font-family:var(--mono); color:var(--text-dim); font-size:14px; padding:40px 0; text-align:center; }
   .error{ color:var(--danger); }
 
   footer{
-    margin-top:72px;
-    padding-top:20px;
-    border-top:1px solid var(--hairline);
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    flex-wrap:wrap;
-    gap:12px;
-    font-family:var(--mono);
-    font-size:12px;
-    color:var(--text-dim);
+    margin-top:72px; padding-top:20px; border-top:1px solid var(--hairline);
+    display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;
+    font-family:var(--mono); font-size:12px; color:var(--text-dim);
   }
   footer a{ color:var(--text-muted); text-decoration:none; }
   footer a:hover{ color:var(--amber); }
@@ -261,6 +216,11 @@
     .cursor{ animation:none; }
     .card{ animation:none; opacity:1; transform:none; }
   }
+
+  @media (max-width: 520px){
+    .hero-top{ flex-direction:column; align-items:flex-start; }
+    .hero-gif{ width:100%; height:180px; }
+  }
 </style>
 </head>
 <body>
@@ -269,26 +229,168 @@
 
     <div class="prompt-bar">
       <span class="dot"></span><span class="dot"></span><span class="dot"></span>
-      &nbsp;itstallam@github &mdash; write-up-index
+      &nbsp;itstallam@github &mdash; profile
     </div>
 
     <div class="terminal" id="terminal" aria-live="polite"></div>
 
-    <h1><span class="veni">VENI VIDI VICI</span></h1>
-    <p class="subtitle">
-      A running index of penetration testing walkthroughs and CTF write-ups &mdash;
-      pulled live from GitHub, so it's never out of date.
-    </p>
-
-    <div class="controls">
-      <label for="filter">grep -i</label>
-      <input id="filter" type="text" placeholder="filter by name, language, or topic&hellip;" autocomplete="off">
-      <span class="count" id="count"></span>
+    <div class="hero-top">
+      <img class="hero-gif" src="https://media.giphy.com/media/d6p2TeOmY2tlmpB4HK/giphy.gif" alt="Matrix-style hacker terminal animation" loading="lazy">
+      <div class="hero-text">
+        <h1><span class="skull">☠</span> <span class="accent">VENI VIDI VICI</span></h1>
+        <div class="typing-wrap">
+          <img src="https://readme-typing-svg.demolab.com?font=IBM+Plex+Mono&weight=600&size=18&duration=3000&pause=900&color=FFB000&center=false&vCenter=true&width=520&height=30&lines=Something+crawled+out+of+the+terminal...;I+dig+through+logs+so+dead+things+stay+dead.;Cybersecurity+practitioner+%E2%80%A2+Intermediate;BSc+ICT+%E2%80%94+Completed" alt="Typing animation of Tony's tagline">
+        </div>
+        <div class="badge-row">
+          <img src="https://img.shields.io/badge/Status-Undead%20%26%20Online-black?style=flat-square&logo=ghost&logoColor=white" alt="status">
+          <img src="https://img.shields.io/badge/Skill%20Level-Intermediate-8B0000?style=flat-square" alt="skill level">
+          <img src="https://img.shields.io/badge/BSc-ICT%20(Completed)-2b2b2b?style=flat-square" alt="education">
+          <img src="https://komarev.com/ghpvc/?username=itstallam&label=Souls%20who%20visited&color=8B0000&style=flat-square" alt="visitor count">
+        </div>
+      </div>
     </div>
 
-    <div id="grid" class="grid" hidden></div>
-    <div id="empty" class="empty" hidden>No matches. Try a different filter.</div>
-    <div id="error" class="error" hidden></div>
+    <p class="subtitle">
+      A cybersecurity practitioner's bio, skills, and a running index of penetration testing
+      walkthroughs &mdash; the write-ups below are pulled live from GitHub, so this page is never out of date.
+    </p>
+
+    <!-- ============ BIO ============ -->
+    <section id="bio">
+      <div class="eyebrow">who summoned this profile</div>
+      <div class="panel">
+        <p>A cybersecurity practitioner who finished a <strong>BSc in Information and Communication Technology</strong> and now spends most nights (and days) hunting through security operations, incident response, vulnerability management, and GRC fundamentals. Cut my teeth doing Tier 1/2 technical support in a live enterprise environment &mdash; Active Directory, VPN, endpoint troubleshooting &mdash; before crawling further into the security side of the crypt.</p>
+        <p>I like taking things that are broken, confusing, or actively on fire, and explaining calmly what's happening and how to fix it. Documentation is basically my séance: if it isn't written down clearly, it didn't happen.</p>
+      </div>
+    </section>
+
+    <!-- ============ CURRENTLY LEARNING ============ -->
+    <section>
+      <div class="eyebrow">currently conjuring</div>
+      <div class="panel">
+        <ul class="list-plain">
+          <li>📡 CompTIA Security+</li>
+          <li>🐍 Python for automation &amp; security</li>
+          <li>🧪 Linux, deeper this time &mdash; not just enough to survive</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ============ CERTS ============ -->
+    <section>
+      <div class="eyebrow">artifacts collected</div>
+      <div class="panel">
+        <ul class="list-plain">
+          <li>🖤 <strong>IBM Cybersecurity Professional Certificate</strong> &mdash; Security Operations, Incident Response, Vulnerability Management, Cloud Security, GRC</li>
+          <li>🕸️ <strong>Cisco Networking Academy</strong> &mdash; Networking &amp; Infrastructure Foundations (Modules 1&ndash;3)</li>
+          <li>⚰️ Currently studying toward: <strong>Security+</strong></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ============ SKILLS ============ -->
+    <section>
+      <div class="eyebrow">spells I cast &mdash; intermediate</div>
+      <div class="panel">
+        <div class="skill-group">
+          <h4>Security Operations &amp; Response</h4>
+          <div class="tag-row">
+            <span class="tag">Incident response lifecycle</span>
+            <span class="tag">Vulnerability management</span>
+            <span class="tag">Log analysis</span>
+            <span class="tag">GRC fundamentals</span>
+            <span class="tag">Patch management basics</span>
+            <span class="tag">Access control</span>
+          </div>
+        </div>
+        <div class="skill-group">
+          <h4>Offense &amp; Defense, in the Lab</h4>
+          <div class="tag-row">
+            <span class="tag">Port scanning (Nmap, Python)</span>
+            <span class="tag">OSINT (recon-ng, theHarvester)</span>
+            <span class="tag">Vulnerability triage (VulnHub, OWASP-BWA)</span>
+            <span class="tag">Attacker/defender analysis</span>
+          </div>
+        </div>
+        <div class="skill-group">
+          <h4>Systems &amp; Networking</h4>
+          <div class="tag-row">
+            <span class="tag">Windows client/server</span>
+            <span class="tag">Linux administration</span>
+            <span class="tag">Active Directory</span>
+            <span class="tag">VPN</span>
+            <span class="tag">TCP/IP &amp; subnetting</span>
+            <span class="tag">DNS/DHCP</span>
+            <span class="tag">Routing &amp; switching (Packet Tracer)</span>
+          </div>
+        </div>
+        <div class="skill-group">
+          <h4>Scripting &amp; Tooling</h4>
+          <div class="tag-row">
+            <span class="tag">Bash</span>
+            <span class="tag">Python</span>
+            <span class="tag">Wireshark</span>
+            <span class="tag">Nmap</span>
+            <span class="tag">Git</span>
+            <span class="tag">VS Code</span>
+            <span class="tag">VirtualBox</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ ASK ME ABOUT ============ -->
+    <section>
+      <div class="eyebrow">ask me about</div>
+      <div class="panel">
+        <ul class="list-plain">
+          <li>🧑‍💻 Getting started in cybersecurity home labs</li>
+          <li>🐧 Linux CLI basics and Bash scripting</li>
+          <li>🔰 Beginner-friendly Python security projects</li>
+          <li>📝 Incident response, from first alert to write-up</li>
+          <li>🔓 Why weak passwords summon worse things than I do</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ============ FUN FACTS ============ -->
+    <section>
+      <div class="eyebrow">fun facts</div>
+      <div class="panel">
+        <p class="fact">The one incantation I only ever run once: <code>rm -rf --no-preserve-root /</code></p>
+        <p class="fact">♟️ Chess rating: <code>~2000 ELO</code> &mdash; I calculate five moves ahead. Yours included.</p>
+      </div>
+    </section>
+
+    <!-- ============ STATS ============ -->
+    <section>
+      <div class="eyebrow">the crypt's ledger</div>
+      <div class="stats-row">
+        <img src="https://github-readme-stats.vercel.app/api?username=itstallam&show_icons=true&theme=gruvbox&hide_border=true&bg_color=12140f&title_color=ffb000&text_color=8a8f7f&icon_color=ffb000" alt="Tony's GitHub stats" height="165">
+        <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=itstallam&layout=compact&theme=gruvbox&hide_border=true&bg_color=12140f&title_color=ffb000&text_color=8a8f7f" alt="Top languages" height="165">
+      </div>
+      <div class="stats-row">
+        <img src="https://github-readme-streak-stats.herokuapp.com/?user=itstallam&theme=gruvbox&hide_border=true&background=12140f&ring=ffb000&fire=ffb000&currStreakLabel=ffb000" alt="GitHub streak stats">
+      </div>
+      <div class="stats-row">
+        <img src="https://github-profile-trophy.vercel.app/?username=itstallam&theme=gruvbox&no-frame=true&row=1&column=6" alt="GitHub trophies">
+      </div>
+    </section>
+
+    <!-- ============ WRITE-UP INDEX ============ -->
+    <section id="writeups">
+      <div class="eyebrow">write-ups from the crypt</div>
+
+      <div class="controls">
+        <label for="filter">grep -i</label>
+        <input id="filter" type="text" placeholder="filter by name, language, or topic&hellip;" autocomplete="off">
+        <span class="count" id="count"></span>
+      </div>
+
+      <div id="grid" class="grid" hidden></div>
+      <div id="empty" class="empty" hidden>No matches. Try a different filter.</div>
+      <div id="error" class="error" hidden></div>
+    </section>
 
     <footer>
       <span id="genline">&mdash;</span>
@@ -466,10 +568,9 @@
   }
 
   typeLines([
-    { prefix: '<span class="prompt">$</span> ', text: `curl api.github.com/users/${USERNAME}/repos`, cls: '' },
-    { prefix: '', text: 'scanning public repositories...', cls: '' },
-    { prefix: '', text: 'probing pages endpoints...', cls: '' },
-    { prefix: '', text: 'done.', cls: 'ok' }
+    { prefix: '<span class="prompt">$</span> ', text: `whoami`, cls: '' },
+    { prefix: '', text: 'itstallam — cybersecurity practitioner', cls: '' },
+    { prefix: '', text: 'loading write-up index...', cls: 'ok' }
   ], load);
 
 })();
