@@ -222,6 +222,7 @@
     .hero-gif{ width:100%; height:180px; }
   }
 </style>
+<base target="_blank">
 </head>
 <body>
 
@@ -365,15 +366,12 @@
     <!-- ============ STATS ============ -->
     <section>
       <div class="eyebrow">the crypt's ledger</div>
+
+      <!-- Live API-driven stats (replaces broken vercel.app image cards) -->
+      <div id="api-stats" style="display:flex;flex-wrap:wrap;gap:14px;justify-content:center;margin-bottom:14px;"></div>
+
       <div class="stats-row">
-        <img src="https://github-readme-stats.vercel.app/api?username=itstallam&show_icons=true&theme=gruvbox&hide_border=true&bg_color=12140f&title_color=ffb000&text_color=8a8f7f&icon_color=ffb000" alt="Tony's GitHub stats" height="165">
-        <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=itstallam&layout=compact&theme=gruvbox&hide_border=true&bg_color=12140f&title_color=ffb000&text_color=8a8f7f" alt="Top languages" height="165">
-      </div>
-      <div class="stats-row">
-        <img src="https://github-readme-streak-stats.herokuapp.com/?user=itstallam&theme=gruvbox&hide_border=true&background=12140f&ring=ffb000&fire=ffb000&currStreakLabel=ffb000" alt="GitHub streak stats">
-      </div>
-      <div class="stats-row">
-        <img src="https://github-profile-trophy.vercel.app/?username=itstallam&theme=gruvbox&no-frame=true&row=1&column=6" alt="GitHub trophies">
+        <img src="https://streak-stats.demolab.com/?user=itstallam&theme=gruvbox&hide_border=true&background=12140f&ring=ffb000&fire=ffb000&currStreakLabel=ffb000" alt="GitHub streak stats">
       </div>
     </section>
 
@@ -542,6 +540,52 @@
     ));
   });
 
+  async function renderProfileStats(){
+    const box = document.getElementById('api-stats');
+    if(!box || !allRepos.length) return;
+    try{
+      const userRes = await fetch(`https://api.github.com/users/${USERNAME}`);
+      const user = userRes.ok ? await userRes.json() : null;
+
+      // Compute top languages from the already-fetched repo list
+      const langMap = {};
+      allRepos.forEach(r => { if(r.language){ langMap[r.language] = (langMap[r.language]||0)+1; } });
+      const topLangs = Object.entries(langMap).sort((a,b) => b[1]-a[1]).slice(0,4);
+
+      let html = '';
+      if(user){
+        const items = [
+          {label:'Public Repos', value:user.public_repos},
+          {label:'Followers',    value:user.followers},
+          {label:'Following',    value:user.following},
+          {label:'Gists',        value:user.public_gists}
+        ];
+        html += `<div style="display:flex;flex-wrap:wrap;gap:14px;justify-content:center;width:100%;">`;
+        items.forEach(s => {
+          html += `
+            <div class="panel" style="flex:1 1 120px;max-width:160px;text-align:center;padding:18px 12px;">
+              <div style="font-family:var(--mono);font-size:26px;color:var(--amber);font-weight:700;line-height:1;">${s.value}</div>
+              <div style="font-family:var(--mono);font-size:11px;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.06em;margin-top:6px;">${s.label}</div>
+            </div>`;
+        });
+        html += `</div>`;
+      }
+      if(topLangs.length){
+        html += `<div style="display:flex;flex-wrap:wrap;gap:10px;justify-content:center;width:100%;margin-top:14px;">`;
+        topLangs.forEach(([lang, count]) => {
+          html += `
+            <div class="panel" style="display:inline-flex;align-items:center;gap:8px;padding:8px 14px;">
+              <span style="width:8px;height:8px;border-radius:50%;background:var(--amber);display:inline-block;"></span>
+              <span style="font-family:var(--mono);font-size:13px;color:var(--text);">${escapeHtml(lang)}</span>
+              <span style="font-family:var(--mono);font-size:11px;color:var(--text-dim);">${count}</span>
+            </div>`;
+        });
+        html += `</div>`;
+      }
+      box.innerHTML = html;
+    }catch(e){ box.innerHTML = ''; }
+  }
+
   async function load(){
     try{
       const res = await fetch(`https://api.github.com/users/${USERNAME}/repos?per_page=100&sort=updated`, {
@@ -559,6 +603,7 @@
       await resolveLinks(allRepos);
 
       render(allRepos);
+      renderProfileStats();
       genline.textContent = `generated ${new Date().toLocaleString()} · ${allRepos.length} repos indexed`;
     } catch(err){
       errorEl.hidden = false;
